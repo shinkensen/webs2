@@ -26,8 +26,7 @@ export default function Home() {
               </div>
               
               <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-                15-year-old programmer specializing in Web Development, Data Structures & Algorithms, 
-                and building innovative solutions
+                15-year-old programmer specializing in in Javascript/Typescript, Full Stack Development, and writing innovative solutions.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
