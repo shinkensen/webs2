@@ -7,7 +7,7 @@ import DynamicBackground from '../components/DynamicBackground';
 import CodingActivityChart from '../components/CodingActivityChart';
 import { SiGithub } from 'react-icons/si';
 import { FaFire } from 'react-icons/fa';
-
+//s
 interface HackatimeStats {
   data: {
     total_seconds: number;
