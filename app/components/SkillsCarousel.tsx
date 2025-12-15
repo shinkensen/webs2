@@ -57,66 +57,100 @@ const row2 = allSkills.slice(7, 14);
 const row3 = allSkills.slice(14, 22);
 
 export default function SkillsCarousel() {
-  const [scrollY, setScrollY] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const row1Ref = useRef<HTMLDivElement>(null);
+  const row2Ref = useRef<HTMLDivElement>(null);
+  const row3Ref = useRef<HTMLDivElement>(null);
+  const targetScrollY = useRef(0);
+  const currentScrollY = useRef(0);
+  const animationFrameId = useRef<number>();
 
   useEffect(() => {
+    // Smooth interpolation function (lerp)
+    const lerp = (start: number, end: number, factor: number) => {
+      return start + (end - start) * factor;
+    };
+
+    // Animation loop for smooth movement
+    const animate = () => {
+      // Smoothly interpolate towards target with lerp
+      currentScrollY.current = lerp(currentScrollY.current, targetScrollY.current, 0.1);
+
+      // Update transforms directly on DOM (no React re-renders)
+      const itemWidth = 164;
+      
+      if (row1Ref.current) {
+        const singleSetWidth = 7 * itemWidth;
+        const offset = -singleSetWidth + (currentScrollY.current % singleSetWidth);
+        row1Ref.current.style.transform = `translate3d(${offset}px, 0, 0)`;
+      }
+      
+      if (row2Ref.current) {
+        const singleSetWidth = 7 * itemWidth;
+        const offset = -singleSetWidth - (currentScrollY.current % singleSetWidth);
+        row2Ref.current.style.transform = `translate3d(${offset}px, 0, 0)`;
+      }
+      
+      if (row3Ref.current) {
+        const singleSetWidth = 8 * itemWidth;
+        const offset = -singleSetWidth + (currentScrollY.current % singleSetWidth);
+        row3Ref.current.style.transform = `translate3d(${offset}px, 0, 0)`;
+      }
+
+      animationFrameId.current = requestAnimationFrame(animate);
+    };
+
+    // Update target scroll position based on viewport scroll
     const handleScroll = () => {
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
         const viewportHeight = window.innerHeight;
         
-        // Calculate scroll progress when element is in viewport
         if (rect.top < viewportHeight && rect.bottom > 0) {
           const progress = (viewportHeight - rect.top) / (viewportHeight + rect.height);
-          setScrollY(progress * 1500); // Increased multiplier for smoother, more visible movement
+          targetScrollY.current = progress * 1500;
         }
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial call
+    // Start animation loop
+    animationFrameId.current = requestAnimationFrame(animate);
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+    };
   }, []);
 
-  const renderSkillRow = (skills: typeof allSkills, direction: 'left' | 'right') => {
-    // Duplicate skills 3 times for seamless infinite scroll
-    const tripleSkills = [...skills, ...skills, ...skills];
+  const renderSkillRow = (skills: typeof allSkills, direction: 'left' | 'right', rowRef: React.RefObject<HTMLDivElement>) => {
+    // Duplicate skills 4 times for ultra-seamless infinite scroll
+    const quadSkills = [...skills, ...skills, ...skills, ...skills];
     
-    // Calculate single set width (140px card + 24px gap = 164px per item)
-    const itemWidth = 164;
-    const singleSetWidth = skills.length * itemWidth;
-    
-    // Calculate offset based on direction
-    let offset;
-    if (direction === 'left') {
-      // Left movement: as scrollY increases, become MORE negative (move left)
-      offset = (-singleSetWidth - (scrollY % singleSetWidth));
-    } else {
-      // Right movement: as scrollY increases, become LESS negative (move right)
-      offset = (-singleSetWidth + (scrollY % singleSetWidth));
-    }
-
     return (
       <div className="relative overflow-hidden py-4">
         <div
-          className="flex gap-6 transition-transform duration-100 ease-linear"
+          ref={rowRef}
+          className="flex gap-6"
           style={{
-            transform: `translateX(${offset}px)`,
             width: 'fit-content',
             willChange: 'transform',
           }}
         >
-          {tripleSkills.map((skill, idx) => {
+          {quadSkills.map((skill, idx) => {
             const Icon = skill.icon;
             return (
               <div
                 key={`${skill.name}-${idx}`}
-                className="flex flex-col items-center justify-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-orange-500/20 hover:border-orange-500 transition-all hover:scale-110 group min-w-[140px] flex-shrink-0"
+                className="flex flex-col items-center justify-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-orange-500/20 hover:border-orange-500 transition-colors hover:scale-110 group min-w-[140px] flex-shrink-0"
+                style={{ transform: 'translateZ(0)' }}
               >
                 <Icon
-                  className="text-5xl mb-3 transition-all group-hover:scale-125"
+                  className="text-5xl mb-3 transition-transform group-hover:scale-125"
                   style={{ color: skill.color }}
                 />
                 <span className="text-sm font-semibold text-white whitespace-nowrap">
@@ -132,9 +166,9 @@ export default function SkillsCarousel() {
 
   return (
     <div ref={containerRef} className="w-full space-y-6">
-      {renderSkillRow(row1, 'right')}
-      {renderSkillRow(row2, 'left')}
-      {renderSkillRow(row3, 'right')}
+      {renderSkillRow(row1, 'right', row1Ref)}
+      {renderSkillRow(row2, 'left', row2Ref)}
+      {renderSkillRow(row3, 'right', row3Ref)}
     </div>
   );
 }
