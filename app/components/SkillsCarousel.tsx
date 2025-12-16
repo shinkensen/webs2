@@ -59,6 +59,12 @@ const row3 = allSkills.slice(14, 22);
 export default function SkillsCarousel() {
   const [offset, setOffset] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const row1Ref = useRef<HTMLDivElement>(null);
+  const row2Ref = useRef<HTMLDivElement>(null);
+  const row3Ref = useRef<HTMLDivElement>(null);
+  const targetScrollY = useRef(0);
+  const currentScrollY = useRef(0);
+  const animationFrameId = useRef<number>();
 
   useEffect(() => {
     let animationFrameId: number;
@@ -108,15 +114,16 @@ export default function SkillsCarousel() {
             willChange: 'transform',
           }}
         >
-          {tripleSkills.map((skill, idx) => {
+          {quadSkills.map((skill, idx) => {
             const Icon = skill.icon;
             return (
               <div
                 key={`${skill.name}-${idx}`}
-                className="flex flex-col items-center justify-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-orange-500/20 hover:border-orange-500 transition-all hover:scale-110 group min-w-[140px] flex-shrink-0"
+                className="flex flex-col items-center justify-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-orange-500/20 hover:border-orange-500 transition-colors hover:scale-110 group min-w-[140px] flex-shrink-0"
+                style={{ transform: 'translateZ(0)' }}
               >
                 <Icon
-                  className="text-5xl mb-3 transition-all group-hover:scale-125"
+                  className="text-5xl mb-3 transition-transform group-hover:scale-125"
                   style={{ color: skill.color }}
                 />
                 <span className="text-sm font-semibold text-white whitespace-nowrap">
@@ -132,9 +139,9 @@ export default function SkillsCarousel() {
 
   return (
     <div ref={containerRef} className="w-full space-y-6">
-      {renderSkillRow(row1, 'right')}
-      {renderSkillRow(row2, 'left')}
-      {renderSkillRow(row3, 'right')}
+      {renderSkillRow(row1, 'right', row1Ref)}
+      {renderSkillRow(row2, 'left', row2Ref)}
+      {renderSkillRow(row3, 'right', row3Ref)}
     </div>
   );
 }
