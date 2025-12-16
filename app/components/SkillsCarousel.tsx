@@ -57,27 +57,27 @@ const row2 = allSkills.slice(7, 14);
 const row3 = allSkills.slice(14, 22);
 
 export default function SkillsCarousel() {
-  const [scrollY, setScrollY] = useState(0);
+  const [offset, setOffset] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-        
-        // Calculate scroll progress when element is in viewport
-        if (rect.top < viewportHeight && rect.bottom > 0) {
-          const progress = (viewportHeight - rect.top) / (viewportHeight + rect.height);
-          setScrollY(progress * 1500); // Increased multiplier for smoother, more visible movement
-        }
-      }
+    let animationFrameId: number;
+    let startTime = Date.now();
+
+    const animate = () => {
+      const currentTime = Date.now();
+      const elapsed = currentTime - startTime;
+      
+      // Speed: 30 pixels per second (adjust this value to change speed)
+      const speed = 30;
+      setOffset((elapsed * speed) / 1000);
+
+      animationFrameId = requestAnimationFrame(animate);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial call
+    animationFrameId = requestAnimationFrame(animate);
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
   const renderSkillRow = (skills: typeof allSkills, direction: 'left' | 'right') => {
@@ -89,21 +89,21 @@ export default function SkillsCarousel() {
     const singleSetWidth = skills.length * itemWidth;
     
     // Calculate offset based on direction
-    let offset;
+    let transformOffset;
     if (direction === 'left') {
-      // Left movement: as scrollY increases, become MORE negative (move left)
-      offset = (-singleSetWidth - (scrollY % singleSetWidth));
+      // Left movement: as offset increases, become MORE negative (move left)
+      transformOffset = (-singleSetWidth - (offset % singleSetWidth));
     } else {
-      // Right movement: as scrollY increases, become LESS negative (move right)
-      offset = (-singleSetWidth + (scrollY % singleSetWidth));
+      // Right movement: as offset increases, become LESS negative (move right)
+      transformOffset = (-singleSetWidth + (offset % singleSetWidth));
     }
 
     return (
       <div className="relative overflow-hidden py-4">
         <div
-          className="flex gap-6 transition-transform duration-100 ease-linear"
+          className="flex gap-6 transition-none"
           style={{
-            transform: `translateX(${offset}px)`,
+            transform: `translateX(${transformOffset}px)`,
             width: 'fit-content',
             willChange: 'transform',
           }}
