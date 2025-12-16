@@ -62,9 +62,6 @@ export default function SkillsCarousel() {
   const row1Ref = useRef<HTMLDivElement>(null);
   const row2Ref = useRef<HTMLDivElement>(null);
   const row3Ref = useRef<HTMLDivElement>(null);
-  const targetScrollY = useRef(0);
-  const currentScrollY = useRef(0);
-  const animationFrameId = useRef<number>();
 
   useEffect(() => {
     let animationFrameId: number;
@@ -75,7 +72,7 @@ export default function SkillsCarousel() {
       const elapsed = currentTime - startTime;
       
       // Speed: 30 pixels per second (adjust this value to change speed)
-      const speed = 30;
+      const speed = 70;
       setOffset((elapsed * speed) / 1000);
 
       animationFrameId = requestAnimationFrame(animate);
@@ -114,7 +111,7 @@ export default function SkillsCarousel() {
             willChange: 'transform',
           }}
         >
-          {quadSkills.map((skill, idx) => {
+          {tripleSkills.map((skill, idx) => {
             const Icon = skill.icon;
             return (
               <div
@@ -139,9 +136,9 @@ export default function SkillsCarousel() {
 
   return (
     <div ref={containerRef} className="w-full space-y-6">
-      {renderSkillRow(row1, 'right', row1Ref)}
-      {renderSkillRow(row2, 'left', row2Ref)}
-      {renderSkillRow(row3, 'right', row3Ref)}
+      {renderSkillRow(row1, 'right')}
+      {renderSkillRow(row2, 'left')}
+      {renderSkillRow(row3, 'right')}
     </div>
   );
 }
