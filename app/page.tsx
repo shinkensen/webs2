@@ -1,96 +1,219 @@
-import Link from 'next/link';
-import Navigation from './components/Navigation';
-import DynamicBackground from './components/DynamicBackground';
+import Nav from './components/Nav';
+import Hero from './components/Hero';
+import Stats from './components/Stats';
+import StackMarquee from './components/StackMarquee';
+import FocusScroller from './components/FocusScroller';
+import ScrollWords from './components/ScrollWords';
+import ScrollEffects from './components/ScrollEffects';
+import GithubCard from './components/GithubCard';
+import { SiGithub } from 'react-icons/si';
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <div data-reveal className="flex items-center gap-3">
+      <span className="h-px w-8 bg-white/25" />
+      <span className="text-[11px] uppercase tracking-[0.25em] text-white/40">{children}</span>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
-      <DynamicBackground />
-      <Navigation />
-      
-      <main className="pt-20 relative z-10">
-        {/* Hero Section */}
-        <section className="min-h-screen flex items-center justify-center px-6">
-          <div className="max-w-5xl w-full">
-            <div className="text-center space-y-8">
-              <div className="space-y-4">
-                <h1 className="text-6xl md:text-8xl font-bold text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] animate-pulse">
-                  Govind Nair
-                </h1>
-                <div className="flex items-center justify-center gap-3 flex-wrap">
-                  <span className="text-2xl md:text-4xl text-white/80">I am</span>
-                  <span className="text-2xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 animate-pulse drop-shadow-[0_0_20px_rgba(255,69,0,0.6)]">
-                    a Developer!
-                  </span>
+    <div className="noise relative min-h-screen bg-black text-white">
+      <ScrollEffects />
+      <Nav />
+
+      <main>
+        <Hero />
+
+        {/* ---------------- ABOUT ---------------- */}
+        <section id="about" className="relative px-6 py-28 sm:py-40">
+          <div className="mx-auto max-w-6xl">
+            <Eyebrow>About</Eyebrow>
+
+            <div className="mt-10 grid gap-14 lg:grid-cols-[1.15fr_1fr] lg:gap-24">
+              <div>
+                <h2
+                  data-reveal
+                  className="display text-balance text-[clamp(2rem,5vw,3.75rem)] text-white"
+                >
+                  I build things for the web, and I&nbsp;don&apos;t stop at
+                  &ldquo;it&nbsp;works&rdquo;.
+                </h2>
+                <div
+                  data-reveal
+                  style={{ '--reveal-delay': '120ms' } as React.CSSProperties}
+                  className="mt-8 space-y-5 text-[15px] leading-relaxed text-white/55 sm:text-base"
+                >
+                  <p>
+                    I&apos;m Govind — a 16-year-old programmer from Illinois, currently a
+                    junior at Adlai E. Stevenson High School. I spend most of my free
+                    time writing TypeScript, breaking things in Arch Linux, and turning
+                    half-formed ideas into deployed products.
+                  </p>
+                  <p>
+                    My work sits at the intersection of engineering and design: full-stack
+                    architecture on one side, obsessive interface detail on the other. I
+                    like systems I can reason about, interfaces that feel instant, and code
+                    that someone else can read six months later.
+                  </p>
+                </div>
+
+                <div
+                  data-reveal
+                  style={{ '--reveal-delay': '200ms' } as React.CSSProperties}
+                  className="mt-10 flex flex-wrap gap-6"
+                >
+                  <a
+                    href="https://github.com/shinkensen"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline-sweep flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
+                  >
+                    <SiGithub /> @shinkensen
+                  </a>
+                  <a
+                    href="#stats"
+                    className="underline-sweep text-sm text-white/70 transition-colors hover:text-white"
+                  >
+                    See live coding stats
+                  </a>
                 </div>
               </div>
-              
-              <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-                15-year-old programmer specializing in in Javascript/Typescript, Full Stack Development, and writing innovative solutions.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
-                <Link
-                  href="/profile"
-                  className="px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-lg transition-all transform hover:scale-105 shadow-lg shadow-orange-500/50 hover:shadow-orange-500/70"
-                >
-                  View My Profile
-                </Link>
-                <Link
-                  href="/projects"
-                  className="px-8 py-4 border-2 border-orange-500 hover:bg-orange-500/10 text-white font-bold rounded-lg transition-all transform hover:scale-105 hover:shadow-lg hover:shadow-orange-500/30"
-                >
-                  See My Projects
-                </Link>
-              </div>
+
+              {/* github card */}
+              <GithubCard />
             </div>
           </div>
         </section>
 
-        {/* Quick Info Section */}
-        <section className="py-20 px-6">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-              About Me
+        {/* ---------------- SCROLL STATEMENT ---------------- */}
+        <section className="relative overflow-hidden px-6 py-32 sm:py-48">
+          <div
+            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[420px] w-[820px] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-white/[0.045] blur-[130px]"
+            data-parallax="0.06"
+          />
+          <ScrollWords text="Code is the cheapest material in the world. The hard part is taste — knowing what to build, what to cut, and what to make feel effortless." />
+        </section>
+
+        {/* ---------------- STATS ---------------- */}
+        <section id="stats" className="relative px-6 pb-28 sm:pb-40">
+          <div className="mx-auto max-w-6xl">
+            <Eyebrow>Live metrics</Eyebrow>
+            <h2
+              data-reveal
+              className="display mt-8 max-w-3xl text-[clamp(2rem,5vw,3.5rem)] text-white"
+            >
+              Receipts, not claims.
             </h2>
-            
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="p-8 bg-white/5 backdrop-blur-sm rounded-xl border-2 border-orange-500/30 hover:border-orange-500 transition-all hover:shadow-lg hover:shadow-orange-500/20 group">
-                <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-orange-500 transition-colors">Who I Am</h3>
-                <p className="text-white/80 leading-relaxed">
-                  I am a 15-year-old programmer from Illinois (US). I attend Adlai E. Stevenson High School 
-                  and I am in 10th grade. I specialize in Javascript/Typescript, Full Stack Development, and writing innovative programs.
-                </p>
-              </div>
-              
-              <div className="p-8 bg-white/5 backdrop-blur-sm rounded-xl border-2 border-red-500/30 hover:border-red-500 transition-all hover:shadow-lg hover:shadow-red-500/20 group">
-                <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-red-500 transition-colors">Quick Facts</h3>
-                <ul className="space-y-2 text-white/80">
-                  <li className="flex items-start">
-                    <span className="text-orange-500 mr-2 text-xl">▹</span>
-                    I Daily Drive a Vivobook S16 OLED
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-orange-500 mr-2 text-xl">▹</span>
-                    Use both Windows 11 and Arch Linux
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-orange-500 mr-2 text-xl">▹</span>
-                    Love computers (Hardware and Software)
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-orange-500 mr-2 text-xl">▹</span>
-                    Want to be either a SWE or go into CyberSec 
-                  </li>
-                </ul>
-              </div>
+            <p
+              data-reveal
+              style={{ '--reveal-delay': '120ms' } as React.CSSProperties}
+              className="mt-5 max-w-xl text-[15px] leading-relaxed text-white/50"
+            >
+              Every hour below is tracked automatically while I code — pulled straight
+              from the Hackatime API, outside of school hours.
+            </p>
+
+            <div className="mt-14">
+              <Stats />
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------- STACK ---------------- */}
+        <section id="stack" className="relative border-y border-white/[0.07] py-24 sm:py-32">
+          <div className="mx-auto max-w-6xl px-6">
+            <Eyebrow>Toolkit</Eyebrow>
+            <div className="mt-8 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+              <h2 data-reveal className="display max-w-xl text-[clamp(2rem,5vw,3.5rem)] text-white">
+                The stack I reach for.
+              </h2>
+              <p
+                data-reveal="right"
+                className="max-w-sm text-sm leading-relaxed text-white/45"
+              >
+                Languages, frameworks and tools I use daily — hover to pause.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-14">
+            <StackMarquee />
+          </div>
+        </section>
+
+        {/* ---------------- FOCUS ---------------- */}
+        <section id="work" className="relative px-6 py-28 sm:py-40">
+          <div className="mx-auto max-w-6xl">
+            <Eyebrow>What I do</Eyebrow>
+            <h2
+              data-reveal
+              className="display mb-16 mt-8 max-w-2xl text-[clamp(2rem,5vw,3.5rem)] text-white"
+            >
+              Five things I&apos;m deliberately good at.
+            </h2>
+            <FocusScroller />
+          </div>
+        </section>
+
+        {/* ---------------- CONTACT ---------------- */}
+        <section id="contact" className="relative overflow-hidden px-6 py-32 sm:py-44">
+          <div className="grid-bg mask-radial pointer-events-none absolute inset-0 -z-10 opacity-60" />
+          <div
+            className="pointer-events-none absolute bottom-[-30%] left-1/2 -z-10 h-[520px] w-[900px] -translate-x-1/2 rounded-[50%] bg-white/[0.06] blur-[140px]"
+            data-parallax="0.04"
+          />
+          <div className="mx-auto max-w-4xl text-center">
+            <Eyebrow>
+              <span className="mx-auto">Contact</span>
+            </Eyebrow>
+            <h2
+              data-reveal
+              className="display mt-8 text-balance text-[clamp(2.2rem,7vw,5rem)] text-white"
+            >
+              Let&apos;s build something
+              <br />
+              worth shipping.
+            </h2>
+            <p
+              data-reveal
+              style={{ '--reveal-delay': '140ms' } as React.CSSProperties}
+              className="mx-auto mt-7 max-w-xl text-[15px] leading-relaxed text-white/50 sm:text-base"
+            >
+              Open to collaborations, hackathon teams and ambitious side projects.
+              The fastest way to reach me is GitHub.
+            </p>
+            <div
+              data-reveal
+              style={{ '--reveal-delay': '240ms' } as React.CSSProperties}
+              className="mt-11 flex flex-col items-center justify-center gap-3 sm:flex-row"
+            >
+              <a
+                href="https://github.com/shinkensen"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex w-full items-center justify-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-medium text-black transition-transform duration-300 hover:scale-[1.03] active:scale-95 sm:w-auto"
+              >
+                <SiGithub className="text-base" />
+                github.com/shinkensen
+              </a>
+              <a
+                href="#top"
+                className="w-full rounded-full border border-white/15 px-8 py-4 text-sm font-medium text-white/80 transition-all duration-300 hover:border-white/40 hover:bg-white/5 hover:text-white sm:w-auto"
+              >
+                Back to top
+              </a>
             </div>
           </div>
         </section>
       </main>
-      
-      <footer className="py-8 text-center text-white/50 border-t border-orange-500/20 relative z-10">
-        <p>© 2025 Govind Nair. All rights reserved.</p>
+
+      <footer className="border-t border-white/[0.07] px-6 py-10">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-xs text-white/35 sm:flex-row">
+          <p>© {new Date().getFullYear()} Govind Nair. All rights reserved.</p>
+          <p className="font-mono">Built with Next.js · Deployed on Vercel</p>
+        </div>
       </footer>
     </div>
   );
